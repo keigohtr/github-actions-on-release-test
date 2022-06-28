@@ -1,0 +1,37 @@
+name: Create release
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: write
+  actions: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: 'main'
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Create release
+        id: create
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'keigoht@gmail.com'
+          SHA7=$(git rev-parse --short HEAD)
+          gh release create release/$SHA7 --generate-notes
