@@ -34,4 +34,4 @@ jobs:
           git config --global user.name 'GitHub Actions'
           git config --global user.email 'keigoht@gmail.com'
           SHA7=$(git rev-parse --short HEAD)
-          gh release create release/$SHA7 --generate-notes
+          gh release create release/$SHA7 --generate-notes --target main
