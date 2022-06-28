@@ -1,0 +1,31 @@
+name: "release trigger"
+
+on:
+  release:
+    types: [published]
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
+  actions: read
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  trigger:
+    name: "Trigger"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Echo
+        if: github.event_name == 'release'
+        run: echo "succeeded"
