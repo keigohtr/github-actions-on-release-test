@@ -6,7 +6,7 @@ on:
 permissions:
   id-token: write
   contents: write
-  actions: read
+  actions: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -34,5 +34,4 @@ jobs:
           git config --global user.name 'GitHub Actions'
           git config --global user.email 'keigoht@gmail.com'
           SHA7=$(git rev-parse --short HEAD)
-          gh release create release/$SHA7 --draft --generate-notes
-          gh release edit release/$SHA7 --draft=false
+          gh release create release/$SHA7 --generate-notes --target main
